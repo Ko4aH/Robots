@@ -1,11 +1,10 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.TextArea;
+import java.awt.*;
 
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 import log.LogChangeListener;
 import log.LogEntry;
@@ -15,6 +14,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
 {
     private LogWindowSource m_logSource;
     private TextArea m_logContent;
+    private static final Point logContentSize = new Point(200, 500);
 
     public LogWindow(LogWindowSource logSource) 
     {
@@ -22,13 +22,28 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
         m_logSource = logSource;
         m_logSource.registerListener(this);
         m_logContent = new TextArea("");
-        m_logContent.setSize(200, 500);
+        m_logContent.setEditable(false);
+        m_logContent.setSize(logContentSize.x, logContentSize.y);
         
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_logContent, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
         updateLogContent();
+
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addInternalFrameListener(new InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosing(InternalFrameEvent e) {
+                var result = JOptionPane.showConfirmDialog(e.getInternalFrame(),
+                        "Вы действительно хотите закрыть окно?",
+                        "Требуется подтверждение",
+                        JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    e.getInternalFrame().dispose();
+                }
+            }
+        });
     }
 
     private void updateLogContent()

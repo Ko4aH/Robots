@@ -1,5 +1,7 @@
 package log;
 
+import java.util.LinkedList;
+
 public class LogEntry
 {
     private LogLevel m_logLevel;
