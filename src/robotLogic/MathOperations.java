@@ -3,8 +3,8 @@ package robotLogic;
 import java.awt.*;
 import static robotLogic.Constants.*;
 
-public class Math {
-    private Math() {}
+public class MathOperations {
+    private MathOperations() {}
 
     public static double distance(double x1, double y1, double x2, double y2)
     {

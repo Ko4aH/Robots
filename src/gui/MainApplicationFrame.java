@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -53,9 +52,9 @@ public class MainApplicationFrame extends JFrame
         gameWindow.setSize(gameWindowSize.x, gameWindowSize.y);
         addWindow(gameWindow);
 
-        var menuConstructor = new MenuBarConstructor(this);
-        setJMenuBar(menuConstructor.generate());
+        setJMenuBar(new MenuBarConstruction(this).generate());
     }
+
 
     protected LogWindow createLogWindow()
     {

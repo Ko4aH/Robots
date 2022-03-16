@@ -2,7 +2,7 @@ package robotLogic;
 
 import java.awt.*;
 
-import static robotLogic.Math.*;
+import static robotLogic.MathOperations.*;
 import static robotLogic.Constants.*;
 
 public class Field {
@@ -18,18 +18,18 @@ public class Field {
         velocity = applyLimits(velocity, 0, maxVelocity);
         angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
         double newX = m_robotPositionX + velocity / angularVelocity *
-                (java.lang.Math.sin(m_robotDirection  + angularVelocity * duration) -
-                        java.lang.Math.sin(m_robotDirection));
+                (Math.sin(m_robotDirection  + angularVelocity * duration) -
+                        Math.sin(m_robotDirection));
         if (!Double.isFinite(newX))
         {
-            newX = m_robotPositionX + velocity * duration * java.lang.Math.cos(m_robotDirection);
+            newX = m_robotPositionX + velocity * duration * Math.cos(m_robotDirection);
         }
         double newY = m_robotPositionY - velocity / angularVelocity *
-                (java.lang.Math.cos(m_robotDirection  + angularVelocity * duration) -
-                        java.lang.Math.cos(m_robotDirection));
+                (Math.cos(m_robotDirection  + angularVelocity * duration) -
+                        Math.cos(m_robotDirection));
         if (!Double.isFinite(newY))
         {
-            newY = m_robotPositionY + velocity * duration * java.lang.Math.sin(m_robotDirection);
+            newY = m_robotPositionY + velocity * duration * Math.sin(m_robotDirection);
         }
         m_robotPositionX = newX;
         m_robotPositionY = newY;
@@ -58,6 +58,40 @@ public class Field {
         }
 
         moveRobot(velocity, angularVelocity, 10);
+    }
+
+    public void simpleMovement()
+    {
+        var distance = distance(m_targetPositionX, m_targetPositionY,
+                m_robotPositionX, m_robotPositionY);
+        if (distance < 0.5) return;
+        var angularVelocity = findAngularVelocity();
+        moveRobot(findVelocity(angularVelocity), angularVelocity, Duration);
+
+    }
+
+    private double findAngularVelocity()
+    {
+        var angleToTarget = angleTo(m_robotPositionX, m_robotPositionY, m_targetPositionX, m_targetPositionY);
+        var deltaAngle = angleToTarget - m_robotDirection;
+        return applyLimits(deltaAngle / Duration, -maxAngularVelocity, maxAngularVelocity);
+    }
+
+    private double findVelocity(double angularVelocity)
+    {
+        var angleToTarget = angleTo(m_robotPositionX, m_robotPositionY, m_targetPositionX, m_targetPositionY);
+        var estimatedAngle = m_robotDirection + angularVelocity * Duration;
+        var deltaAngle = angleToTarget - estimatedAngle;
+        //Если по намеченному курсу будем отдаляться от цели, то ждём поворота к ней
+        //if(Math.abs(deltaAngle) - Math.PI / 2 > 1e-5) return 0;
+        //Если ещё не повернули на цель - дожидаемся поворота
+        if(Math.abs(deltaAngle) > 1e-5) return 0;
+        else {
+            var y = (m_targetPositionX + m_targetPositionY + m_robotPositionY - m_robotPositionX) / 2;
+            var x = y - m_targetPositionY + m_robotPositionX;
+            return applyLimits((distance(x, y, m_robotPositionX, m_robotPositionY) / Duration),
+                    -maxVelocity, maxVelocity);
+        }
     }
 
     public void setTargetPosition(Point p)

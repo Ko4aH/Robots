@@ -7,9 +7,7 @@ public final class Logger
         defaultLogSource = new LogWindowSource(100);
     }
     
-    private Logger()
-    {
-    }
+    private Logger() {}
 
     public static void debug(String strMessage)
     {

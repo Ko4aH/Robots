@@ -5,10 +5,10 @@ import log.Logger;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
-public class MenuBarConstructor {
+public class MenuBarConstruction {
     private MainApplicationFrame parent;
 
-    public MenuBarConstructor(MainApplicationFrame parent)
+    public MenuBarConstruction(MainApplicationFrame parent)
     {
         this.parent = parent;
     }
@@ -53,20 +53,25 @@ public class MenuBarConstructor {
             testMenu.add(addLogMessageItem);
         }
 
-        var exitButton = new JMenuItem("Выход");
-        exitButton.addActionListener(e -> {
-            var result = JOptionPane.showConfirmDialog(parent,
-                    "Вы действительно хотите закрыть окно?",
-                    "Требуется подтверждение",
-                    JOptionPane.YES_NO_OPTION);
-            if (result == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            }
-        });
+        var optionsMenu = new JMenu("Опции");
+
+        {
+            var exitButton = new JMenuItem("Выход");
+            exitButton.addActionListener(e -> {
+                var result = JOptionPane.showConfirmDialog(parent,
+                        "Вы действительно хотите закрыть окно?",
+                        "Требуется подтверждение",
+                        JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
+            });
+            optionsMenu.add(exitButton);
+        }
+
         menuBar.add(lookAndFeelMenu);
         menuBar.add(testMenu);
-        menuBar.add(exitButton);
-        menuBar.add(Box.createHorizontalGlue());
+        menuBar.add(optionsMenu);
         return menuBar;
     }
 

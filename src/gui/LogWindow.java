@@ -32,6 +32,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
         updateLogContent();
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -40,6 +41,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
                         "Требуется подтверждение",
                         JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
+                    m_logSource.unregisterListener((LogWindow) e.getInternalFrame());
                     e.getInternalFrame().dispose();
                 }
             }
