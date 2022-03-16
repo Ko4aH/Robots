@@ -1,9 +1,6 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -18,11 +15,16 @@ public class GameVisualizer extends JPanel
 {
     private final Timer m_timer = initTimer();
     private final Field field = new Field();
+    private final Point robotSize = new Point(30, 10);
+    private final Point robotEyeSize = new Point(5, 5);
+    private final Point targetSize = robotEyeSize;
+    private final int robotEyeOffsetX = 10;
+    private final int redrawTick = 50;
+    private final int movementCalculationTick = 10;
     
     private static Timer initTimer() 
     {
-        Timer timer = new Timer("events generator", true);
-        return timer;
+        return new Timer("events generator", true);
     }
     
     public GameVisualizer() 
@@ -34,15 +36,15 @@ public class GameVisualizer extends JPanel
             {
                 onRedrawEvent();
             }
-        }, 0, 50);
+        }, 0, redrawTick);
         m_timer.schedule(new TimerTask()
         {
             @Override
             public void run()
             {
-                field.onModelUpdateEvent();
+                field.simpleMovement();
             }
-        }, 0, 10);
+        }, 0, movementCalculationTick);
         addMouseListener(new MouseAdapter()
         {
             @Override
@@ -92,13 +94,13 @@ public class GameVisualizer extends JPanel
         AffineTransform t = AffineTransform.getRotateInstance(direction, robotCenterX, robotCenterY); 
         g.setTransform(t);
         g.setColor(Color.ORANGE);
-        fillOval(g, robotCenterX, robotCenterY, 30, 10);
+        fillOval(g, robotCenterX, robotCenterY, robotSize.x, robotSize.y);
         g.setColor(Color.BLACK);
-        drawOval(g, robotCenterX, robotCenterY, 30, 10);
+        drawOval(g, robotCenterX, robotCenterY, robotSize.x, robotSize.y);
         g.setColor(Color.WHITE);
-        fillOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
+        fillOval(g, robotCenterX  + robotEyeOffsetX, robotCenterY, robotEyeSize.x, robotEyeSize.y);
         g.setColor(Color.BLACK);
-        drawOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
+        drawOval(g, robotCenterX  + robotEyeOffsetX, robotCenterY, robotEyeSize.x, robotEyeSize.y);
     }
     
     private void drawTarget(Graphics2D g, int x, int y)
@@ -106,8 +108,8 @@ public class GameVisualizer extends JPanel
         AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0); 
         g.setTransform(t);
         g.setColor(Color.GREEN);
-        fillOval(g, x, y, 5, 5);
+        fillOval(g, x, y, targetSize.x, targetSize.y);
         g.setColor(Color.BLACK);
-        drawOval(g, x, y, 5, 5);
+        drawOval(g, x, y, targetSize.x, targetSize.y);
     }
 }
