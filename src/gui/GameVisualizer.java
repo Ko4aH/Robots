@@ -42,7 +42,7 @@ public class GameVisualizer extends JPanel
             @Override
             public void run()
             {
-                field.simpleMovement();
+                field.onModelUpdateEvent();
             }
         }, 0, movementCalculationTick);
         addMouseListener(new MouseAdapter()
