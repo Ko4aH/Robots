@@ -8,12 +8,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import robotLogic.Field;
+import robotLogic.Robot;
 
 import javax.swing.JPanel;
 
 public class GameVisualizer extends JPanel
 {
-    private final Timer m_timer = initTimer();
+    private final Timer timer = initTimer();
     private final Field field = new Field();
     private final Point robotSize = new Point(30, 10);
     private final Point robotEyeSize = new Point(5, 5);
@@ -29,7 +30,7 @@ public class GameVisualizer extends JPanel
     
     public GameVisualizer() 
     {
-        m_timer.schedule(new TimerTask()
+        timer.schedule(new TimerTask()
         {
             @Override
             public void run()
@@ -37,7 +38,7 @@ public class GameVisualizer extends JPanel
                 onRedrawEvent();
             }
         }, 0, redrawTick);
-        m_timer.schedule(new TimerTask()
+        timer.schedule(new TimerTask()
         {
             @Override
             public void run()
@@ -73,8 +74,8 @@ public class GameVisualizer extends JPanel
     {
         super.paint(g);
         Graphics2D g2d = (Graphics2D)g; 
-        drawRobot(g2d, round(field.m_robotPositionX), round(field.m_robotPositionY), field.m_robotDirection);
-        drawTarget(g2d, field.m_targetPositionX, field.m_targetPositionY);
+        drawRobot(g2d, round(Robot.robotPositionX), round(Robot.robotPositionY), Robot.robotDirection);
+        drawTarget(g2d, field.targetPositionX, field.targetPositionY);
     }
     
     private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2)
@@ -89,8 +90,8 @@ public class GameVisualizer extends JPanel
     
     private void drawRobot(Graphics2D g, int x, int y, double direction)
     {
-        int robotCenterX = round(field.m_robotPositionX);
-        int robotCenterY = round(field.m_robotPositionY);
+        int robotCenterX = round(Robot.robotPositionX);
+        int robotCenterY = round(Robot.robotPositionY);
         AffineTransform t = AffineTransform.getRotateInstance(direction, robotCenterX, robotCenterY); 
         g.setTransform(t);
         g.setColor(Color.ORANGE);

@@ -12,21 +12,21 @@ import log.LogWindowSource;
 
 public class LogWindow extends JInternalFrame implements LogChangeListener
 {
-    private LogWindowSource m_logSource;
-    private TextArea m_logContent;
+    private LogWindowSource logSource;
+    private TextArea logContent;
     private static final Point logContentSize = new Point(200, 500);
 
     public LogWindow(LogWindowSource logSource) 
     {
         super("Протокол работы", true, true, true, true);
-        m_logSource = logSource;
-        m_logSource.registerListener(this);
-        m_logContent = new TextArea("");
-        m_logContent.setEditable(false);
-        m_logContent.setSize(logContentSize.x, logContentSize.y);
+        this.logSource = logSource;
+        this.logSource.registerListener(this);
+        logContent = new TextArea("");
+        logContent.setEditable(false);
+        logContent.setSize(logContentSize.x, logContentSize.y);
         
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(m_logContent, BorderLayout.CENTER);
+        panel.add(logContent, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
         updateLogContent();
@@ -41,7 +41,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
                         "Требуется подтверждение",
                         JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
-                    m_logSource.unregisterListener((LogWindow) e.getInternalFrame());
+                    LogWindow.this.logSource.unregisterListener((LogWindow) e.getInternalFrame());
                     e.getInternalFrame().dispose();
                 }
             }
@@ -51,12 +51,12 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
     private void updateLogContent()
     {
         StringBuilder content = new StringBuilder();
-        for (LogEntry entry : m_logSource.all())
+        for (LogEntry entry : logSource.all())
         {
             content.append(entry.getMessage()).append("\n");
         }
-        m_logContent.setText(content.toString());
-        m_logContent.invalidate();
+        logContent.setText(content.toString());
+        logContent.invalidate();
     }
     
     @Override
