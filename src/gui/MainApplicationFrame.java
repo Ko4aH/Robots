@@ -18,6 +18,7 @@ public class MainApplicationFrame extends JFrame
 {
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final static Point gameWindowSize = new Point(400, 400);
+    private final static Point gameWindowLocation = new Point(0, 0);
     private final static Point logWindowSize = new Point(300, 800);
     private final static Point logWindowLocation = new Point(10, 10);
     private final static int inset = 50;
@@ -50,6 +51,7 @@ public class MainApplicationFrame extends JFrame
         addWindow(logWindow);
 
         GameWindow gameWindow = new GameWindow();
+        gameWindow.setLocation(gameWindowLocation);
         gameWindow.setSize(gameWindowSize.x, gameWindowSize.y);
         addWindow(gameWindow);
 

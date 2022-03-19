@@ -8,17 +8,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import robotLogic.Field;
-import robotLogic.Robot;
 
 import javax.swing.JPanel;
 
 public class GameVisualizer extends JPanel
 {
     private final Timer timer = initTimer();
-    private final Field field = new Field();
-    private final Point robotSize = new Point(30, 10);
-    private final Point robotEyeSize = new Point(5, 5);
-    private final Point targetSize = robotEyeSize;
+    public final Field field;
+    public final Dimension robotSize = new Dimension(30, 10);
+    private final Dimension robotEyeSize = new Dimension(5, 5);
+    private final Dimension targetSize = robotEyeSize;
     private final int robotEyeOffsetX = 10;
     private final int redrawTick = 50;
     private final int movementCalculationTick = 10;
@@ -27,9 +26,10 @@ public class GameVisualizer extends JPanel
     {
         return new Timer("events generator", true);
     }
-    
-    public GameVisualizer() 
+
+    public GameVisualizer(Dimension fieldSize)
     {
+        field = new Field(fieldSize);
         timer.schedule(new TimerTask()
         {
             @Override
@@ -43,7 +43,7 @@ public class GameVisualizer extends JPanel
             @Override
             public void run()
             {
-                field.onModelUpdateEvent();
+                field.simpleMovement();
             }
         }, 0, movementCalculationTick);
         addMouseListener(new MouseAdapter()
@@ -51,7 +51,7 @@ public class GameVisualizer extends JPanel
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                field.setTargetPosition(e.getPoint());
+                field.target.setPosition(e.getPoint());
                 repaint();
             }
         });
@@ -74,8 +74,8 @@ public class GameVisualizer extends JPanel
     {
         super.paint(g);
         Graphics2D g2d = (Graphics2D)g; 
-        drawRobot(g2d, round(Robot.robotPositionX), round(Robot.robotPositionY), Robot.robotDirection);
-        drawTarget(g2d, field.targetPositionX, field.targetPositionY);
+        drawRobot(g2d, round(field.robot.getX()), round(field.robot.getX()), field.robot.getDirection());
+        drawTarget(g2d, field.target.getX(), field.target.getY());
     }
     
     private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2)
@@ -90,18 +90,18 @@ public class GameVisualizer extends JPanel
     
     private void drawRobot(Graphics2D g, int x, int y, double direction)
     {
-        int robotCenterX = round(Robot.robotPositionX);
-        int robotCenterY = round(Robot.robotPositionY);
+        int robotCenterX = round(field.robot.getX());
+        int robotCenterY = round(field.robot.getY());
         AffineTransform t = AffineTransform.getRotateInstance(direction, robotCenterX, robotCenterY); 
         g.setTransform(t);
         g.setColor(Color.ORANGE);
-        fillOval(g, robotCenterX, robotCenterY, robotSize.x, robotSize.y);
+        fillOval(g, robotCenterX, robotCenterY, robotSize.width, robotSize.height);
         g.setColor(Color.BLACK);
-        drawOval(g, robotCenterX, robotCenterY, robotSize.x, robotSize.y);
+        drawOval(g, robotCenterX, robotCenterY, robotSize.width, robotSize.height);
         g.setColor(Color.WHITE);
-        fillOval(g, robotCenterX  + robotEyeOffsetX, robotCenterY, robotEyeSize.x, robotEyeSize.y);
+        fillOval(g, robotCenterX  + robotEyeOffsetX, robotCenterY, robotEyeSize.width, robotEyeSize.height);
         g.setColor(Color.BLACK);
-        drawOval(g, robotCenterX  + robotEyeOffsetX, robotCenterY, robotEyeSize.x, robotEyeSize.y);
+        drawOval(g, robotCenterX  + robotEyeOffsetX, robotCenterY, robotEyeSize.width, robotEyeSize.height);
     }
     
     private void drawTarget(Graphics2D g, int x, int y)
@@ -109,8 +109,8 @@ public class GameVisualizer extends JPanel
         AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0); 
         g.setTransform(t);
         g.setColor(Color.GREEN);
-        fillOval(g, x, y, targetSize.x, targetSize.y);
+        fillOval(g, x, y, targetSize.width, targetSize.height);
         g.setColor(Color.BLACK);
-        drawOval(g, x, y, targetSize.x, targetSize.y);
+        drawOval(g, x, y, targetSize.width, targetSize.height);
     }
 }

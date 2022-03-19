@@ -4,38 +4,75 @@ import java.awt.*;
 
 import static robotLogic.MathOperations.*;
 import static robotLogic.Constants.*;
-import static robotLogic.Robot.*;
+import static robotLogic.FieldConfig.*;
 
 public class Field {
-    public volatile int targetPositionX = 150;
-    public volatile int targetPositionY = 100;
+    public volatile int borderX;
+    public volatile int borderY;
 
-    public void onModelUpdateEvent()
+    public Target target;
+    public Robot robot;
+
+    public Field(Dimension border) {
+        borderX = border.width;
+        borderY = border.height;
+        target = new Target(TargetPosition);
+        robot = new Robot(RobotPosition, RobotDirection);
+    }
+
+/*    public void onModelUpdateEvent()
     {
-        double distance = distance(targetPositionX, targetPositionY,
-                robotPositionX, robotPositionY);
-        if (distance < 0.5)
-        {
-            return;
-        }
+        double distance = distance(target.getX(), target.getY(),
+                robot.getX(), robot.getY());
+        if (distance < 0.5) { return; }
         double velocity = maxVelocity;
-        double angleToTarget = angleTo(robotPositionX, robotPositionY, targetPositionX, targetPositionY);
+        double angleToTarget = angleTo(robot.getX(), robot.getY(), target.getX(), target.getY());
         double angularVelocity = 0;
-        if (angleToTarget > robotDirection)
+        if (angleToTarget > robot.getDirection())
         {
             angularVelocity = maxAngularVelocity;
         }
-        if (angleToTarget < robotDirection)
+        if (angleToTarget < robot.getDirection())
         {
             angularVelocity = -maxAngularVelocity;
         }
 
-        moveRobot(velocity, angularVelocity, 10);
+        robot.move(velocity, angularVelocity, borderX, borderY);
+    }*/
+
+    public void simpleMovement()
+    {
+        var distance = distance(target.getX(), target.getY(),
+                robot.getX(), robot.getY());
+        if (distance < 0.5) return;
+        var angularVelocity = findAngularVelocity();
+        robot.move(findVelocity(angularVelocity), angularVelocity, borderX, borderY);
+
     }
 
-    public void setTargetPosition(Point p)
+    private double findAngularVelocity()
     {
-        targetPositionX = p.x;
-        targetPositionY = p.y;
+        var angleToTarget = angleTo(robot.getX(), robot.getY(), target.getX(), target.getY());
+        var deltaAngle = angleToTarget - robot.getDirection();
+        return applyLimits(deltaAngle / Duration, -maxAngularVelocity, maxAngularVelocity);
+    }
+
+    private double findVelocity(double angularVelocity)
+    {
+        var angleToTarget = angleTo(robot.getX(), robot.getY(), target.getX(), target.getY());
+        var estimatedAngle = robot.getDirection() + angularVelocity * Duration;
+        var deltaAngle = angleToTarget - estimatedAngle;
+        //Если по намеченному курсу будем отдаляться от цели, то ждём поворота к ней
+        //if(Math.abs(deltaAngle) - Math.PI / 2 > 1e-5) return 0;
+        //Если ещё не повернули на цель - дожидаемся поворота
+        if(Math.abs(deltaAngle) > 1e-5) return 0;
+        else {
+            /*Идея для быстрого передвижения
+            var y = (target.getX() + target.getY() + robot.getY() - robot.getX()) / 2;
+            var x = y - target.getY() + robot.getX();
+            var newVelocity = distance(x, y, robot.getX(), robot.getY()) / Duration;
+            return applyLimits(newVelocity, 0, maxVelocity);*/
+            return maxVelocity;
+        }
     }
 }

@@ -1,37 +1,46 @@
 package robotLogic;
 
-import static robotLogic.Constants.maxAngularVelocity;
-import static robotLogic.Constants.maxVelocity;
-import static robotLogic.MathOperations.applyLimits;
-import static robotLogic.MathOperations.asNormalizedRadians;
+import java.awt.*;
+
+import static robotLogic.Constants.*;
+import static robotLogic.Constants.Duration;
+import static robotLogic.MathOperations.*;
 
 public class Robot {
+    private volatile double x;
+    private volatile double y;
+    private volatile double direction;
 
-    public static volatile double robotDirection = 0;
-    public static volatile double robotPositionX = 100;
-    public static volatile double robotPositionY = 100;
+    public Robot(Point p, double direction) {
+        this.x = p.x;
+        this.y = p.y;
+        this.direction = direction;
+    }
 
-    public static void moveRobot(double velocity, double angularVelocity, double duration)
+    public double getX() { return x; }
+    public double getY() { return y; }
+    public double getDirection() { return direction; }
+
+    public void move(double velocity, double angularVelocity, int borderX, int borderY)
     {
         velocity = applyLimits(velocity, 0, maxVelocity);
         angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
-        double newX = robotPositionX + velocity / angularVelocity *
-                (java.lang.Math.sin(robotDirection + angularVelocity * duration) -
-                        java.lang.Math.sin(robotDirection));
+        double newX = x + velocity / angularVelocity *
+                (Math.sin(direction + angularVelocity * Duration) - Math.sin(direction));
         if (!Double.isFinite(newX))
         {
-            newX = robotPositionX + velocity * duration * java.lang.Math.cos(robotDirection);
+            newX = x + velocity * Duration * Math.cos(direction);
         }
-        double newY = robotPositionY - velocity / angularVelocity *
-                (java.lang.Math.cos(robotDirection + angularVelocity * duration) -
-                        java.lang.Math.cos(robotDirection));
+        double newY = y - velocity / angularVelocity *
+                (Math.cos(direction + angularVelocity * Duration) - Math.cos(direction));
         if (!Double.isFinite(newY))
         {
-            newY = robotPositionY + velocity * duration * java.lang.Math.sin(robotDirection);
+            newY = y + velocity * Duration * Math.sin(direction);
         }
-        robotPositionX = newX;
-        robotPositionY = newY;
-        double newDirection = asNormalizedRadians(robotDirection + angularVelocity * duration);
-        robotDirection = newDirection;
+        x = applyLimits(newX, 0, borderX);
+        y = applyLimits(newY, 0, borderY);
+        double newDirection = asNormalizedRadians(direction + angularVelocity * Duration);
+
+        direction = newDirection;
     }
 }

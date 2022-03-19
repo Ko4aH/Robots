@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
@@ -12,12 +14,19 @@ public class GameWindow extends JInternalFrame
     public GameWindow() 
     {
         super("Игровое поле", true, true, true, true);
-        visualizer = new GameVisualizer();
+        visualizer = new GameVisualizer(getSize());
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                visualizer.field.borderX = e.getComponent().getSize().width - visualizer.robotSize.height;
+                visualizer.field.borderY = e.getComponent().getSize().height - visualizer.robotSize.width;
+            }
+        });
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
