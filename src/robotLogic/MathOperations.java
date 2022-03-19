@@ -10,7 +10,7 @@ public class MathOperations {
     {
         double diffX = x1 - x2;
         double diffY = y1 - y2;
-        return java.lang.Math.sqrt(diffX * diffX + diffY * diffY);
+        return Math.sqrt(diffX * diffX + diffY * diffY);
     }
 
     public static double angleTo(double fromX, double fromY, double toX, double toY)
@@ -18,7 +18,7 @@ public class MathOperations {
         double diffX = toX - fromX;
         double diffY = toY - fromY;
 
-        return asNormalizedRadians(java.lang.Math.atan2(diffY, diffX));
+        return asNormalizedRadians(Math.atan2(diffY, diffX));
     }
 
     public static double applyLimits(double value, double min, double max)
@@ -34,11 +34,11 @@ public class MathOperations {
     {
         while (angle < 0)
         {
-            angle += 2* java.lang.Math.PI;
+            angle += 2* Math.PI;
         }
-        while (angle >= 2* java.lang.Math.PI)
+        while (angle >= 2* Math.PI)
         {
-            angle -= 2* java.lang.Math.PI;
+            angle -= 2* Math.PI;
         }
         return angle;
     }

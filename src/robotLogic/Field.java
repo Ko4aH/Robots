@@ -57,7 +57,7 @@ public class Field {
             angularVelocity = -maxAngularVelocity;
         }
 
-        moveRobot(velocity, angularVelocity, 10);
+        moveRobot(velocity, angularVelocity, Duration);
     }
 
     public void simpleMovement()
