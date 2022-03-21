@@ -1,4 +1,4 @@
-package robotLogic;
+package gameLogic;
 
 import java.awt.*;
 

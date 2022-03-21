@@ -7,7 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import robotLogic.Field;
+import gameLogic.Field;
 
 import javax.swing.JPanel;
 

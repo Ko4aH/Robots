@@ -1,7 +1,4 @@
-package robotLogic;
-
-import java.awt.*;
-import static robotLogic.Constants.*;
+package gameLogic;
 
 public class MathOperations {
     private MathOperations() {}

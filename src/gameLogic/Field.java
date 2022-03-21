@@ -1,10 +1,10 @@
-package robotLogic;
+package gameLogic;
 
 import java.awt.*;
 
-import static robotLogic.MathOperations.*;
-import static robotLogic.Constants.*;
-import static robotLogic.FieldConfig.*;
+import static gameLogic.MathOperations.*;
+import static gameLogic.MovementConstants.*;
+import static gameLogic.FieldConfig.*;
 
 public class Field {
     public volatile int borderX;

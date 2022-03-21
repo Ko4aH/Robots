@@ -1,10 +1,10 @@
-package robotLogic;
+package gameLogic;
 
 import java.awt.*;
 
-import static robotLogic.Constants.*;
-import static robotLogic.Constants.Duration;
-import static robotLogic.MathOperations.*;
+import static gameLogic.MovementConstants.*;
+import static gameLogic.MovementConstants.Duration;
+import static gameLogic.MathOperations.*;
 
 public class Robot {
     private volatile double x;
