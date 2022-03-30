@@ -21,8 +21,8 @@ public class RobotsProgram
       }
       SwingUtilities.invokeLater(() -> {
         MainApplicationFrame frame = new MainApplicationFrame();
-        frame.pack();
+        //frame.pack();
         frame.setVisible(true);
-        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+        //frame.setExtendedState(Frame.MAXIMIZED_BOTH);
       });
     }}

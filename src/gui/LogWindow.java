@@ -9,8 +9,9 @@ import javax.swing.event.InternalFrameEvent;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
+import stateSaving.SaveableObjJInternalFrame;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener
+public class LogWindow extends SaveableObjJInternalFrame implements LogChangeListener
 {
     private LogWindowSource logSource;
     private TextArea logContent;
@@ -19,6 +20,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
     public LogWindow(LogWindowSource logSource) 
     {
         super("Протокол работы", true, true, true, true);
+        this.setName("log");
         this.logSource = logSource;
         this.logSource.registerListener(this);
         logContent = new TextArea("");
@@ -31,7 +33,8 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
         pack();
         updateLogContent();
 
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
