@@ -14,17 +14,13 @@ import java.util.Collections;
  */
 public class LogWindowSource
 {
-    //были изменены поля protected на private, добавлен контроллер m_iQueueLength для задачи выше
-    private int m_iQueueLength;
-
-    private ArrayList<LogEntry> messages;
-    private final ArrayList<LogChangeListener> listeners;
-    private volatile LogChangeListener[] activeListeners;
+    protected LimitedQueue<LogEntry> messages;
+    protected final ArrayList<LogChangeListener> listeners;
+    protected volatile LogChangeListener[] activeListeners;
     
     public LogWindowSource(int iQueueLength) 
     {
-        m_iQueueLength = iQueueLength;
-        messages = new ArrayList<>(iQueueLength);
+        messages = new LimitedQueue<>(iQueueLength);
         listeners = new ArrayList<>();
     }
     
