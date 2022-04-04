@@ -2,8 +2,8 @@ package robotLogic;
 
 import java.awt.*;
 
-import static robotLogic.Constants.*;
-import static robotLogic.Constants.Duration;
+import static robotLogic.MovementConstants.*;
+import static robotLogic.MovementConstants.Duration;
 import static robotLogic.MathOperations.*;
 
 public class Robot {

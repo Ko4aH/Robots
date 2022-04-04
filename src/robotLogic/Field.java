@@ -3,7 +3,7 @@ package robotLogic;
 import java.awt.*;
 
 import static robotLogic.MathOperations.*;
-import static robotLogic.Constants.*;
+import static robotLogic.MovementConstants.*;
 import static robotLogic.FieldConfig.*;
 
 public class Field {
