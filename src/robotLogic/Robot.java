@@ -2,8 +2,7 @@ package robotLogic;
 
 import java.awt.*;
 
-import static robotLogic.Constants.*;
-import static robotLogic.Constants.Duration;
+import static robotLogic.MovementConstants.*;
 import static robotLogic.MathOperations.*;
 
 public class Robot {
@@ -39,8 +38,6 @@ public class Robot {
         }
         x = applyLimits(newX, 0, borderX);
         y = applyLimits(newY, 0, borderY);
-        double newDirection = asNormalizedRadians(direction + angularVelocity * Duration);
-
-        direction = newDirection;
+        direction = asNormalizedRadians(direction + angularVelocity * Duration);
     }
 }

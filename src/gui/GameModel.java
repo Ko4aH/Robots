@@ -5,7 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static robotLogic.FieldConfig.*;
-import static robotLogic.Constants.*;
+import static robotLogic.MovementConstants.*;
 import static robotLogic.MathOperations.*;
 
 public class GameModel extends Observable {
