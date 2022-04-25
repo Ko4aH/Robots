@@ -40,39 +40,25 @@ public class Field {
         robot.move(velocity, angularVelocity, borderX, borderY);
     }*/
 
-    public void simpleMovement()
-    {
-        var distance = distance(target.getX(), target.getY(),
-                robot.getX(), robot.getY());
+    public void simpleMovement() {
+        var distance = distance(target.getX(), target.getY(), robot.getX(), robot.getY());
         if (distance < 0.5) return;
         var angularVelocity = findAngularVelocity();
         robot.move(findVelocity(angularVelocity), angularVelocity, borderX, borderY);
-
     }
 
-    private double findAngularVelocity()
-    {
+    private double findAngularVelocity() {
         var angleToTarget = angleTo(robot.getX(), robot.getY(), target.getX(), target.getY());
         var deltaAngle = angleToTarget - robot.getDirection();
         return applyLimits(deltaAngle / Duration, -maxAngularVelocity, maxAngularVelocity);
     }
 
-    private double findVelocity(double angularVelocity)
-    {
+    private double findVelocity(double angularVelocity) {
         var angleToTarget = angleTo(robot.getX(), robot.getY(), target.getX(), target.getY());
         var estimatedAngle = robot.getDirection() + angularVelocity * Duration;
         var deltaAngle = angleToTarget - estimatedAngle;
-        //Если по намеченному курсу будем отдаляться от цели, то ждём поворота к ней
-        //if(Math.abs(deltaAngle) - Math.PI / 2 > 1e-5) return 0;
-        //Если ещё не повернули на цель - дожидаемся поворота
-        if(Math.abs(deltaAngle) > 1e-5) return 0;
-        else {
-            /*Идея для быстрого передвижения
-            var y = (target.getX() + target.getY() + robot.getY() - robot.getX()) / 2;
-            var x = y - target.getY() + robot.getX();
-            var newVelocity = distance(x, y, robot.getX(), robot.getY()) / Duration;
-            return applyLimits(newVelocity, 0, maxVelocity);*/
-            return maxVelocity;
-        }
+        if (Math.abs(deltaAngle) > 1e-5)
+            return 0;
+        return maxVelocity;
     }
 }

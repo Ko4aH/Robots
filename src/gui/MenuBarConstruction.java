@@ -6,15 +6,13 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 
 public class MenuBarConstruction {
-    private MainApplicationFrame parent;
+    private final MainApplicationFrame parent;
 
-    public MenuBarConstruction(MainApplicationFrame parent)
-    {
+    public MenuBarConstruction(MainApplicationFrame parent) {
         this.parent = parent;
     }
 
-    public JMenuBar generate()
-    {
+    public JMenuBar generate() {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu lookAndFeelMenu = new JMenu("Режим отображения");
@@ -47,9 +45,7 @@ public class MenuBarConstruction {
 
         {
             JMenuItem addLogMessageItem = new JMenuItem("Сообщение в лог", KeyEvent.VK_S);
-            addLogMessageItem.addActionListener((event) -> {
-                Logger.debug("Новая строка");
-            });
+            addLogMessageItem.addActionListener((event) -> Logger.debug("Новая строка"));
             testMenu.add(addLogMessageItem);
         }
 
@@ -76,16 +72,12 @@ public class MenuBarConstruction {
     }
 
 
-    private void setLookAndFeel(String className)
-    {
-        try
-        {
+    private void setLookAndFeel(String className) {
+        try {
             UIManager.setLookAndFeel(className);
             SwingUtilities.updateComponentTreeUI(parent);
-        }
-        catch (ClassNotFoundException | InstantiationException
-                | IllegalAccessException | UnsupportedLookAndFeelException e)
-        {
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | UnsupportedLookAndFeelException e) {
             // just ignore
         }
     }
