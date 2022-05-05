@@ -22,15 +22,11 @@ public class GameVisualizer extends JPanel implements Observer {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                setTargetPosition(e.getPoint());
+                m_model.target.setTargetPosition(e.getPoint());
                 repaint();
             }
         });
         setDoubleBuffered(true);
-    }
-
-    protected void setTargetPosition(Point p) {
-        m_model.setTargetPosition(p.x, p.y);
     }
 
     protected void onRedrawEvent() {
@@ -41,8 +37,8 @@ public class GameVisualizer extends JPanel implements Observer {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
-        drawRobot(g2d, m_model.getRobotPositionX(), m_model.getRobotPositionY(), m_model.getRobotDirection());
-        drawTarget(g2d, m_model.getTargetPositionX(), m_model.getTargetPositionY());
+        drawRobot(g2d, m_model.robot.getRobotPositionX(), m_model.robot.getRobotPositionY(), m_model.robot.getRobotDirection());
+        drawTarget(g2d, m_model.target.getTargetPositionX(), m_model.target.getTargetPositionY());
     }
 
     private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2) {

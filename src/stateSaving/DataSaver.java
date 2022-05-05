@@ -11,7 +11,7 @@ public class DataSaver {
         data.put(nameWindow, state);
     }
 
-    private static final File file = new File(System.getProperty("user.home") + File.separator + "javaRobotsState");
+    private static final File file = new File(System.getProperty("user.home") + File.separator + "javaRobotsState.txt");
 
     public static void save(SaveableObj[] windows) {
         for (var window : windows) window.saveState();

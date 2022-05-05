@@ -48,20 +48,20 @@ public class InfoWindow extends SaveableObjJInternalFrame implements Observer {
     }
 
     @Override
-    public void update(Observable o, Object key) {
+    public void update(Observable o, Object arg) {
         if (AdditionalFuncs.areEqual(m_model, o)) {
-            if (AdditionalFuncs.areEqual(GameModel.REPAINT, key)) {
-                var robotX = m_model.getRobotPositionX();
-                var robotY = m_model.getRobotPositionY();
-                var targetX = m_model.getTargetPositionX();
-                var targetY = m_model.getTargetPositionY();
+            if (AdditionalFuncs.areEqual(GameModel.REPAINT, arg)) {
+                var robotX = m_model.robot.getRobotPositionX();
+                var robotY = m_model.robot.getRobotPositionY();
+                var targetX = m_model.target.getTargetPositionX();
+                var targetY = m_model.target.getTargetPositionY();
                 var angleToTarget = MathOperations.angleTo(robotX, robotY, targetX, targetY);
 
                 m_robotX.setText(doubleToString(robotX));
                 m_robotY.setText(doubleToString(robotY));
                 m_targetX.setText(doubleToString(targetX));
                 m_targetY.setText(doubleToString(targetY));
-                m_direction.setText(doubleToString(m_model.getRobotDirection()));
+                m_direction.setText(doubleToString(m_model.robot.getRobotDirection()));
                 m_angleToTarget.setText(doubleToString(angleToTarget));
             }
         }
