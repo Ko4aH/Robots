@@ -68,7 +68,7 @@ public class MainApplicationFrame extends SaveableObjJFrame {
         logWindow.setSize(logWindowSize.x, logWindowSize.y);
         setMinimumSize(logWindow.getSize());
         logWindow.pack();
-        Logger.debug("Протокол работает");
+        Logger.debug(LocaleResources.getResources().get("LogWindow.IsWorking"));
         return logWindow;
     }
 
@@ -83,8 +83,8 @@ public class MainApplicationFrame extends SaveableObjJFrame {
             public void windowClosing(WindowEvent e) {
                 int result = JOptionPane.showConfirmDialog(
                         e.getWindow(),
-                        "Вы действительно хотите закрыть окно?",
-                        "Требуется подтверждение",
+                        LocaleResources.getResources().get("ConfirmDialog.Message"),
+                        LocaleResources.getResources().get("ConfirmDialog.Title"),
                         JOptionPane.YES_NO_OPTION);
 
                 if (result == JOptionPane.YES_OPTION) {

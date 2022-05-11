@@ -15,7 +15,8 @@ public class LogWindow extends SaveableObjJInternalFrame implements LogChangeLis
     private static final Point logContentSize = new Point(200, 500);
 
     public LogWindow(LogWindowSource logSource) {
-        super("Протокол работы", true, true, true, true);
+        super(LocaleResources.getResources().get("LogWindow.Title"),
+                true, true, true, true);
         this.setName("log");
         this.logSource = logSource;
         this.logSource.registerListener(this);

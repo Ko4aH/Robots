@@ -18,7 +18,8 @@ public class InfoWindow extends SaveableObjJInternalFrame implements Observer {
     private final Label m_angleToTarget = new Label();
 
     public InfoWindow(GameModel model) {
-        super("Координаты робота", true, true, true, true);
+        super(LocaleResources.getResources().get("InfoWindow.Title"),
+                true, true, true, true);
         setName("position");
 
         m_model = model;
@@ -27,13 +28,14 @@ public class InfoWindow extends SaveableObjJInternalFrame implements Observer {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        var locale = LocaleResources.getResources();
 
-        addRow(panel, "RobotX", m_robotX);
-        addRow(panel, "RobotY", m_robotY);
-        addRow(panel, "TargetX", m_targetX);
-        addRow(panel, "TargetY", m_targetY);
-        addRow(panel, "Direction", m_direction);
-        addRow(panel, "AngleToTarget", m_angleToTarget);
+        addRow(panel, locale.get("InfoWindow.RobotX"), m_robotX);
+        addRow(panel, locale.get("InfoWindow.RobotY"), m_robotY);
+        addRow(panel, locale.get("InfoWindow.TargetX"), m_targetX);
+        addRow(panel, locale.get("InfoWindow.TargetY"), m_targetY);
+        addRow(panel, locale.get("InfoWindow.Direction"), m_direction);
+        addRow(panel, locale.get("InfoWindow.AngleToTarget"), m_angleToTarget);
 
         getContentPane().add(panel);
         pack();
@@ -61,13 +63,23 @@ public class InfoWindow extends SaveableObjJInternalFrame implements Observer {
                 m_robotY.setText(doubleToString(robotY));
                 m_targetX.setText(doubleToString(targetX));
                 m_targetY.setText(doubleToString(targetY));
-                m_direction.setText(doubleToString(m_model.robot.getRobotDirection()));
-                m_angleToTarget.setText(doubleToString(angleToTarget));
+                m_direction.setText(
+                        doubleToString(
+                                radiansToDegrees(
+                                        m_model.robot.getRobotDirection())));
+                m_angleToTarget.setText(
+                        doubleToString(
+                                radiansToDegrees(
+                                        angleToTarget)));
             }
         }
     }
 
     private String doubleToString(double number) {
         return String.format("%.2f", number);
+    }
+
+    private double radiansToDegrees(double angle) {
+        return angle * 180 / Math.PI;
     }
 }
