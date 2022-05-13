@@ -20,59 +20,25 @@ public class Field {
         robot = new Robot(RobotPosition, RobotDirection);
     }
 
-/*    public void onModelUpdateEvent()
-    {
-        double distance = distance(target.getX(), target.getY(),
-                robot.getX(), robot.getY());
-        if (distance < 0.5) { return; }
-        double velocity = maxVelocity;
-        double angleToTarget = angleTo(robot.getX(), robot.getY(), target.getX(), target.getY());
-        double angularVelocity = 0;
-        if (angleToTarget > robot.getDirection())
-        {
-            angularVelocity = maxAngularVelocity;
-        }
-        if (angleToTarget < robot.getDirection())
-        {
-            angularVelocity = -maxAngularVelocity;
-        }
-
-        robot.move(velocity, angularVelocity, borderX, borderY);
-    }*/
-
-    public void simpleMovement()
-    {
-        var distance = distance(target.getX(), target.getY(),
-                robot.getX(), robot.getY());
+    public void simpleMovement() {
+        var distance = distance(target.getTargetPositionX(), target.getTargetPositionY(), robot.getRobotPositionX(), robot.getRobotPositionY());
         if (distance < 0.5) return;
         var angularVelocity = findAngularVelocity();
-        robot.move(findVelocity(angularVelocity), angularVelocity, borderX, borderY);
-
+        robot.moveRobot(findVelocity(angularVelocity), angularVelocity, borderX, borderY);
     }
 
-    private double findAngularVelocity()
-    {
-        var angleToTarget = angleTo(robot.getX(), robot.getY(), target.getX(), target.getY());
-        var deltaAngle = angleToTarget - robot.getDirection();
+    private double findAngularVelocity() {
+        var angleToTarget = angleTo(robot.getRobotPositionX(), robot.getRobotPositionY(), target.getTargetPositionX(), target.getTargetPositionY());
+        var deltaAngle = angleToTarget - robot.getRobotDirection();
         return applyLimits(deltaAngle / Duration, -maxAngularVelocity, maxAngularVelocity);
     }
 
-    private double findVelocity(double angularVelocity)
-    {
-        var angleToTarget = angleTo(robot.getX(), robot.getY(), target.getX(), target.getY());
-        var estimatedAngle = robot.getDirection() + angularVelocity * Duration;
+    private double findVelocity(double angularVelocity) {
+        var angleToTarget = angleTo(robot.getRobotPositionX(), robot.getRobotPositionY(), target.getTargetPositionX(), target.getTargetPositionY());
+        var estimatedAngle = robot.getRobotDirection() + angularVelocity * Duration;
         var deltaAngle = angleToTarget - estimatedAngle;
-        //Если по намеченному курсу будем отдаляться от цели, то ждём поворота к ней
-        //if(Math.abs(deltaAngle) - Math.PI / 2 > 1e-5) return 0;
-        //Если ещё не повернули на цель - дожидаемся поворота
-        if(Math.abs(deltaAngle) > 1e-5) return 0;
-        else {
-            /*Идея для быстрого передвижения
-            var y = (target.getX() + target.getY() + robot.getY() - robot.getX()) / 2;
-            var x = y - target.getY() + robot.getX();
-            var newVelocity = distance(x, y, robot.getX(), robot.getY()) / Duration;
-            return applyLimits(newVelocity, 0, maxVelocity);*/
-            return maxVelocity;
-        }
+        if (Math.abs(deltaAngle) > 1e-5)
+            return 0;
+        return maxVelocity;
     }
 }

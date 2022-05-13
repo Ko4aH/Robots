@@ -3,7 +3,6 @@ package robotLogic;
 import java.awt.*;
 
 import static robotLogic.MovementConstants.*;
-import static robotLogic.MovementConstants.Duration;
 import static robotLogic.MathOperations.*;
 
 public class Robot {
@@ -17,30 +16,28 @@ public class Robot {
         this.direction = direction;
     }
 
-    public double getX() { return x; }
-    public double getY() { return y; }
-    public double getDirection() { return direction; }
+    public double getRobotPositionX() {
+        return x;
+    }
 
-    public void move(double velocity, double angularVelocity, int borderX, int borderY)
-    {
+    public double getRobotPositionY() {
+        return y;
+    }
+
+    public double getRobotDirection() {
+        return direction;
+    }
+
+    public void moveRobot(double velocity, double angularVelocity, int borderX, int borderY) {
         velocity = applyLimits(velocity, 0, maxVelocity);
         angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
-        double newX = x + velocity / angularVelocity *
-                (Math.sin(direction + angularVelocity * Duration) - Math.sin(direction));
-        if (!Double.isFinite(newX))
-        {
-            newX = x + velocity * Duration * Math.cos(direction);
-        }
-        double newY = y - velocity / angularVelocity *
-                (Math.cos(direction + angularVelocity * Duration) - Math.cos(direction));
-        if (!Double.isFinite(newY))
-        {
-            newY = y + velocity * Duration * Math.sin(direction);
-        }
+        double newX = x + velocity / angularVelocity * (Math.sin(direction + angularVelocity * Duration) - Math.sin(direction));
+        if (!Double.isFinite(newX)) newX = x + velocity * Duration * Math.cos(direction);
+        double newY = y - velocity / angularVelocity * (Math.cos(direction + angularVelocity * Duration) - Math.cos(direction));
+        if (!Double.isFinite(newY)) newY = y + velocity * Duration * Math.sin(direction);
+        double newDirection = asNormalizedRadians(direction + angularVelocity * Duration);
         x = applyLimits(newX, 0, borderX);
         y = applyLimits(newY, 0, borderY);
-        double newDirection = asNormalizedRadians(direction + angularVelocity * Duration);
-
         direction = newDirection;
     }
 }

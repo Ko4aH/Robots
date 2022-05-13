@@ -11,11 +11,15 @@ public class Target {
         this.y = p.y;
     }
 
-    public int getX() { return x; }
+    public int getTargetPositionX() {
+        return x;
+    }
 
-    public int getY() { return y; }
+    public int getTargetPositionY() {
+        return y;
+    }
 
-    public void setPosition(Point p) {
+    public void setTargetPosition(Point p) {
         x = p.x;
         y = p.y;
     }

@@ -4,26 +4,28 @@ import log.Logger;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.util.Locale;
 
 public class MenuBarConstruction {
-    private MainApplicationFrame parent;
+    private final MainApplicationFrame parent;
 
-    public MenuBarConstruction(MainApplicationFrame parent)
-    {
+    public MenuBarConstruction(MainApplicationFrame parent) {
         this.parent = parent;
     }
 
-    public JMenuBar generate()
-    {
+    public JMenuBar generate() {
         JMenuBar menuBar = new JMenuBar();
+        var locale = LocaleResources.getResources();
 
-        JMenu lookAndFeelMenu = new JMenu("Режим отображения");
+        JMenu lookAndFeelMenu = new JMenu(locale.get("MenuBar.LookAndFeelMenu"));
         lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
         lookAndFeelMenu.getAccessibleContext().setAccessibleDescription(
-                "Управление режимом отображения приложения");
+                locale.get("MenuBar.LookAndFeelMenu.Description"));
 
         {
-            JMenuItem systemLookAndFeel = new JMenuItem("Системная схема", KeyEvent.VK_S);
+            JMenuItem systemLookAndFeel = new JMenuItem(
+                    locale.get("MenuBar.LookAndFeelMenu.SystemLookAndFeel"),
+                    KeyEvent.VK_S);
             systemLookAndFeel.addActionListener((event) -> {
                 setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 parent.invalidate();
@@ -32,35 +34,60 @@ public class MenuBarConstruction {
         }
 
         {
-            JMenuItem crossplatformLookAndFeel = new JMenuItem("Универсальная схема", KeyEvent.VK_S);
-            crossplatformLookAndFeel.addActionListener((event) -> {
+            JMenuItem crossPlatformLookAndFeel = new JMenuItem(
+                    locale.get("MenuBar.LookAndFeelMenu.CrossPlatformLookAndFeel"),
+                    KeyEvent.VK_S);
+            crossPlatformLookAndFeel.addActionListener((event) -> {
                 setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                 parent.invalidate();
             });
-            lookAndFeelMenu.add(crossplatformLookAndFeel);
+            lookAndFeelMenu.add(crossPlatformLookAndFeel);
         }
 
-        JMenu testMenu = new JMenu("Тесты");
+        JMenu testMenu = new JMenu(locale.get("MenuBar.TestMenu"));
         testMenu.setMnemonic(KeyEvent.VK_T);
         testMenu.getAccessibleContext().setAccessibleDescription(
                 "Тестовые команды");
 
         {
-            JMenuItem addLogMessageItem = new JMenuItem("Сообщение в лог", KeyEvent.VK_S);
-            addLogMessageItem.addActionListener((event) -> {
-                Logger.debug("Новая строка");
-            });
+            JMenuItem addLogMessageItem = new JMenuItem(
+                    locale.get("MenuBar.TestMenu.AddLogMessageItem"),
+                    KeyEvent.VK_S);
+            addLogMessageItem.addActionListener((event) -> Logger.debug(locale.get("MenuBar.TestMenu.NewMessage")));
             testMenu.add(addLogMessageItem);
         }
 
-        var optionsMenu = new JMenu("Опции");
+        var optionsMenu = new JMenu(locale.get("MenuBar.OptionsMenu"));
 
         {
-            var exitButton = new JMenuItem("Выход");
+            var languageSelection = new JMenu(locale.get("MenuBar.Language"));
+            {
+                var englishLanguage = new JMenuItem(locale.get("MenuBar.English"));
+                englishLanguage.addActionListener(e -> {
+                    JOptionPane.showMessageDialog(parent,
+                            "The selected changes will take effect after restarting the application");
+                    LocaleResources.saveLocale(new Locale("en"));
+                });
+                languageSelection.add(englishLanguage);
+            }
+            {
+                var russianLanguage = new JMenuItem(locale.get("MenuBar.Russian"));
+                russianLanguage.addActionListener(e -> {
+                    JOptionPane.showMessageDialog(parent,
+                            "Выбранные изменения вступят в силу после перезапуска приложения");
+                    LocaleResources.saveLocale(new Locale("ru"));
+                });
+                languageSelection.add(russianLanguage);
+            }
+            optionsMenu.add(languageSelection);
+        }
+
+        {
+            var exitButton = new JMenuItem(locale.get("MenuBar.Exit"));
             exitButton.addActionListener(e -> {
                 var result = JOptionPane.showConfirmDialog(parent,
-                        "Вы действительно хотите закрыть окно?",
-                        "Требуется подтверждение",
+                        locale.get("ConfirmDialog.Message"),
+                        locale.get("ConfirmDialog.Title"),
                         JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
                     System.exit(0);
@@ -76,16 +103,12 @@ public class MenuBarConstruction {
     }
 
 
-    private void setLookAndFeel(String className)
-    {
-        try
-        {
+    private void setLookAndFeel(String className) {
+        try {
             UIManager.setLookAndFeel(className);
             SwingUtilities.updateComponentTreeUI(parent);
-        }
-        catch (ClassNotFoundException | InstantiationException
-                | IllegalAccessException | UnsupportedLookAndFeelException e)
-        {
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | UnsupportedLookAndFeelException e) {
             // just ignore
         }
     }
